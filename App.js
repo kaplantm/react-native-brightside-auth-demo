@@ -25,31 +25,36 @@ import Header from './Components/Header';
 const App: () => React$Node = () => {
   const [musicAuthStatus, setMusicAuthStatus] = useState(undefined);
   const [hasMrBrightside, setHasMrBrightside] = useState(undefined);
+  const {BrightsideAuth} = NativeModules;
 
-  const setupBrightSideAuth = useCallback(async response => {
-    const {BrightsideAuth} = NativeModules;
-
-    const authStatus = await new Promise((resolve, reject) => {
-      BrightsideAuth.startup(value => {
-        // resolve(value);
-        resolve('no');
-      });
-    });
-    setMusicAuthStatus(authStatus);
-
-    console.log('authStatus', authStatus);
-    if (authStatus && authStatus === 'authorized') {
-      const hasMrBrightsideStatus = await new Promise((resolve, reject) => {
-        BrightsideAuth.checkForMrBrightside(async value => {
+  const setupBrightSideAuth = useCallback(
+    async response => {
+      const authStatus = await new Promise((resolve, reject) => {
+        BrightsideAuth.startup(value => {
           resolve(value);
         });
       });
+      setMusicAuthStatus(authStatus);
 
       console.log('authStatus', authStatus);
-      setHasMrBrightside(hasMrBrightsideStatus);
-    }
-    return 'done';
-  }, []);
+      if (authStatus && authStatus === 'authorized') {
+        const hasMrBrightsideStatus = await new Promise((resolve, reject) => {
+          BrightsideAuth.checkForMrBrightside(async value => {
+            resolve(value);
+          });
+        });
+
+        console.log('authStatus', authStatus);
+        setHasMrBrightside(hasMrBrightsideStatus);
+
+        if (hasMrBrightsideStatus) {
+          console.log('SHOULD PLAY');
+          BrightsideAuth.play();
+        }
+      }
+    },
+    [BrightsideAuth],
+  );
 
   useEffect(() => {
     setupBrightSideAuth();
@@ -80,8 +85,14 @@ const App: () => React$Node = () => {
         <Text style={styles.sectionDescription}>
           You have Mr. Brightside on your phone!
         </Text>
-        <Image source={require('./assets/facepalm.jpg')} style={styles.image} />
-        <Text style={styles.sectionDescription}>
+        <Image
+          source={require('./assets/success.jpg')}
+          style={styles.image}
+          resizeMode="contain"
+        />
+        <Text
+          style={styles.sectionDescription}
+          onPress={() => BrightsideAuth.play()}>
           Now you can enjoy the app.
         </Text>
       </>
@@ -190,6 +201,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%',
+    height: '60%',
     marginTop: 40,
     marginBottom: 40,
   },
