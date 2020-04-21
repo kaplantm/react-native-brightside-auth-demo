@@ -13,7 +13,6 @@
 RCT_EXTERN_METHOD(startup: (RCTResponseSenderBlock)callback);
 RCT_EXTERN_METHOD(checkForMrBrightside: (RCTResponseSenderBlock)callback);
 RCT_EXTERN_METHOD(play);
-RCT_EXTERN_METHOD(pause);
 RCT_EXTERN_METHOD(stop);
 RCT_EXTERN_METHOD(cleanup);
 

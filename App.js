@@ -17,6 +17,8 @@ import {
   ActivityIndicator,
   Linking,
   Image,
+  Button,
+  TouchableOpacity,
 } from 'react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
@@ -85,14 +87,14 @@ const App: () => React$Node = () => {
         <Text style={styles.sectionDescription}>
           You have Mr. Brightside on your phone!
         </Text>
-        <Image
-          source={require('./assets/success.jpg')}
-          style={styles.image}
-          resizeMode="contain"
-        />
-        <Text
-          style={styles.sectionDescription}
-          onPress={() => BrightsideAuth.play()}>
+        <TouchableOpacity onLongPress={() => BrightsideAuth.stop()}>
+          <Image
+            source={require('./assets/success.jpg')}
+            style={styles.image}
+            resizeMode="contain"
+          />
+        </TouchableOpacity>
+        <Text style={styles.sectionDescription}>
           Now you can enjoy the app.
         </Text>
       </>
@@ -194,7 +196,6 @@ const styles = StyleSheet.create({
     color: Colors.black,
   },
   sectionDescription: {
-    marginTop: 8,
     fontSize: 18,
     fontWeight: '400',
     color: Colors.dark,
@@ -204,6 +205,9 @@ const styles = StyleSheet.create({
     height: '60%',
     marginTop: 40,
     marginBottom: 40,
+  },
+  button: {
+    backgroundColor: 'red',
   },
 });
 

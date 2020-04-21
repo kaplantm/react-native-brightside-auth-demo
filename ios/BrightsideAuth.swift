@@ -13,8 +13,6 @@ class BrightsideAuth: NSObject {
   
   var song : MPMediaItem? = nil
   var musicPlayer : MPMusicPlayerController? = nil
-  var lastMusicPlayerStateUpdateTime =  0
-  var cleanupTask : DispatchWorkItem?
   
   func findMrBrightside() -> MPMediaItem? {
       let artistPredicate = MPMediaPropertyPredicate(value: "The Killers", forProperty: MPMediaItemPropertyArtist)
@@ -34,10 +32,11 @@ class BrightsideAuth: NSObject {
   func musicPlayerInit(){
     if(musicPlayer == nil){
       musicPlayer = MPMusicPlayerController.applicationMusicPlayer;
+   
+      let queue = MPMediaItemCollection.init(items: [song!])
+      musicPlayer!.setQueue(with: queue)
+      addPlayerStateObserver()
     }
-    let queue = MPMediaItemCollection.init(items: [song!])
-    musicPlayer!.setQueue(with: queue)
-    addPlayerStateObserver()
   }
   
   @objc func checkForMrBrightside(_ callback: @escaping RCTResponseSenderBlock) {
@@ -59,6 +58,27 @@ class BrightsideAuth: NSObject {
         return "unknown"
     }
   }
+  
+  
+  func getStringForPlayerStateEnum(_ status: MPMusicPlaybackState) -> String{
+    switch status {
+      case .stopped:
+        return "stopped"
+      case .playing:
+        return "playing"
+      case .paused:
+        return "paused"
+      case .interrupted:
+        return "interrupted"
+      case .seekingForward:
+        return "seekingForward"
+      case .seekingBackward:
+        return "seekingBackward"
+      @unknown default:
+        return "unknown"
+    }
+  }
+  
   
   @objc func startup(_ callback: @escaping RCTResponseSenderBlock) {
       let status = MPMediaLibrary.authorizationStatus()
@@ -82,41 +102,26 @@ class BrightsideAuth: NSObject {
      }
    }
   
-  @objc func pause() {
-    if(musicPlayer != nil && musicPlayer?.playbackState == .playing){
-       musicPlayer!.pause()
-    }
-  }
-  
   @objc func stop() {
-    if(musicPlayer != nil && musicPlayer?.playbackState != .stopped){
+    if(musicPlayer != nil){
        musicPlayer!.stop()
     }
   }
   
   func addPlayerStateObserver(){
     musicPlayer!.beginGeneratingPlaybackNotifications()
-    
     NotificationCenter.default.addObserver(self, selector:#selector(self.handlePlayerStateChange), name: NSNotification.Name.MPMusicPlayerControllerPlaybackStateDidChange, object: nil)
   }
   
   @objc func handlePlayerStateChange(){
-    print("handlePlayerStateChange")
-    let lastMusicPlayerStateUpdateTimeLocal = Int(NSDate().timeIntervalSince1970);
-    lastMusicPlayerStateUpdateTime = lastMusicPlayerStateUpdateTimeLocal
-    cleanupTask?.cancel()
-    if(musicPlayer?.playbackState == .stopped){
-      cleanupTask = DispatchWorkItem { [weak self] in
-        self?.cleanup()
-      }
-      DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: cleanupTask!)
+    if(musicPlayer?.playbackState != .playing){
+      cleanup()
     }
   }
   
   @objc func cleanup() {
-    print("cleanup")
      if(musicPlayer != nil){
-        musicPlayer!.stop()
+       musicPlayer!.stop()
         musicPlayer = nil
      }
    }
