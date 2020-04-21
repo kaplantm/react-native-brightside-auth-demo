@@ -11,54 +11,52 @@ import MediaPlayer
 @objc(BrightsideAuth)
 class BrightsideAuth: NSObject {
   
-//  func findMrBrightside() -> MPMediaItem? {
-//      let artistPredicate = MPMediaPropertyPredicate(value: "The Killers", forProperty: MPMediaItemPropertyArtist)
-//      let titlePredicate = MPMediaPropertyPredicate(value: "Mr. Brightside", forProperty: MPMediaItemPropertyTitle)
-//      let songQuery = MPMediaQuery()
-//      songQuery.addFilterPredicate(artistPredicate)
-//      songQuery.addFilterPredicate(titlePredicate)
-//
-//      var song: MPMediaItem?
-//      if let items = songQuery.items, items.count > 0 {
-//           song = items[0]
-//      }
-//      return song
-//  }
-//
-//
-//
-//  let status = MPMediaLibrary.authorizationStatus()
-//  switch status {
-//  case .authorized:
-//  callback(["authorized"])
-//  case .notDetermined:
-//      MPMediaLibrary.requestAuthorization() { status in
-//          if status == .authorized {
-////              DispatchQueue.main.async {
-//                callback(["just  authorized"])
-////              }
-//          }
-//    else {
-//      callback(["not just authorized"])
-//
-//    }
-//      }
-//  // ...
-//  case .denied:
-//    callback(["denied"])
-//  case .restricted:
-//  callback(["restricted"])
-//  @unknown default:
-//  callback(["unknown"])
-//  }
-//
-//
   
-//  print(findMrBrightside()?.title)
+  func findMrBrightside() -> MPMediaItem? {
+      let artistPredicate = MPMediaPropertyPredicate(value: "The Killers", forProperty: MPMediaItemPropertyArtist)
+      let titlePredicate = MPMediaPropertyPredicate(value: "Mr. Brightside", forProperty: MPMediaItemPropertyTitle)
+      let songQuery = MPMediaQuery()
+      songQuery.addFilterPredicate(artistPredicate)
+      songQuery.addFilterPredicate(titlePredicate)
+print("findMrBrightside songquery")
+    print("findMrBrightside songquery", songQuery.items!)
+      var song: MPMediaItem?
+      if let items = songQuery.items, items.count > 0 {
+           song = items[0]
+      }
+    return song
+  }
   
-  @objc func startup(_ callback: RCTResponseSenderBlock) {
-   print("initialize")
- callback(["hey dude"])
+  
+  
+  @objc func checkForMrBrightside(_ callback: @escaping RCTResponseSenderBlock) {
+    let song = findMrBrightside()
+    callback([song != nil])
+  }
+  
+  @objc func startup(_ callback: @escaping RCTResponseSenderBlock) {
+      let status = MPMediaLibrary.authorizationStatus()
+    
+      switch status {
+      case .authorized:
+      callback(["authorized"])
+      case .notDetermined:
+          MPMediaLibrary.requestAuthorization() { status in
+              if status == .authorized {
+                    callback(["authorized"])
+              }
+        else {
+          callback(["not just authorized"])
+
+        }
+          }
+      case .denied:
+        callback(["denied"])
+      case .restricted:
+      callback(["restricted"])
+      @unknown default:
+      callback(["unknown"])
+      }
  }
 
   

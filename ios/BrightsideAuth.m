@@ -11,5 +11,6 @@
 @interface RCT_EXTERN_MODULE(BrightsideAuth, NSObject)
 
 RCT_EXTERN_METHOD(startup: (RCTResponseSenderBlock)callback);
+RCT_EXTERN_METHOD(checkForMrBrightside: (RCTResponseSenderBlock)callback);
 
 @end

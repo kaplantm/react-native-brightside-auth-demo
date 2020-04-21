@@ -17,82 +17,78 @@ import {
   NativeModules,
 } from 'react-native';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
+import Header from './Components/Header';
 
 const App: () => React$Node = () => {
-  const {BrightsideAuth} = NativeModules;
-  // const MusicPlayerEventEmitter = new NativeEventEmitter(
-  //   NativeModules.MusicPlayer,
-  // );
+  async function setupBrightSideAuth() {
+    const {BrightsideAuth} = NativeModules;
 
-  console.log({BrightsideAuth});
-  BrightsideAuth.startup(value => {
-    console.log('setup is ' + value);
-  });
-  // BrightsideAuth.show('cats');
+    const authStatus = await new Promise((resolve, reject) => {
+      BrightsideAuth.startup(value => {
+        resolve(value);
+      });
+    });
+
+    if (authStatus && authStatus === 'authorized') {
+      const hasMrBrightside = await new Promise((resolve, reject) => {
+        BrightsideAuth.checkForMrBrightside(value => {
+          resolve(value);
+        });
+      });
+
+      console.log({hasMrBrightside});
+    }
+    return 'done';
+  }
+
+  setupBrightSideAuth();
+
   return (
     <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
+      <ScrollView
+        // eslint-disable-next-line react-native/no-inline-styles
+        contentContainerStyle={{flexGrow: 1}}
+        // contentInsetAdjustmentBehavior="automatic"
+        bounces={false}
+        style={styles.scrollView}>
+        <StatusBar barStyle="dark-content" />
+        <Header />
+        <View style={styles.body}>
+          <View style={styles.sectionContainer}>
+            <Text style={styles.sectionTitle}>BrightsideAuth</Text>
+            <Text style={styles.sectionDescription}>
+              You have Mr. Brightside on your phone!
+            </Text>
+            <Text style={styles.sectionDescription}>
+              Now you can enjoy the app
+            </Text>
           </View>
-        </ScrollView>
-      </SafeAreaView>
+        </View>
+      </ScrollView>
     </>
   );
 };
 
 const styles = StyleSheet.create({
+  viewWrapper: {
+    backgroundColor: 'red',
+    flex: 1,
+  },
   scrollView: {
+    flex: 1,
+  },
+  safeArea: {
+    backgroundColor: 'pink',
+    flex: 1,
+  },
+  body: {
     backgroundColor: Colors.lighter,
+    flex: 1,
   },
   engine: {
     position: 'absolute',
     right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
   },
   sectionContainer: {
     marginTop: 32,
