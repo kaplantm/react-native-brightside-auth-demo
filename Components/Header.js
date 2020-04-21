@@ -1,7 +1,7 @@
 'use strict';
 import Colors from '../constants/colors';
 import type {Node} from 'react';
-import {Text, StyleSheet, Image, View} from 'react-native';
+import {StyleSheet, Image, View} from 'react-native';
 import React from 'react';
 
 const Header = (): Node => (
@@ -12,13 +12,6 @@ const Header = (): Node => (
       resizeMode="cover"
     />
   </View>
-  //   <ImageBackground
-  //     accessibilityRole={'image'}
-  // source={require('../assets/header.jpg')}
-  // style={styles.background}
-  //     imageStyle={styles.logo}>
-  //     <Text style={styles.text}>Brightside Auth</Text>
-  //   </ImageBackground>
 );
 
 const styles = StyleSheet.create({

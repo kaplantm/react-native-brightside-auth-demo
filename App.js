@@ -15,6 +15,8 @@ import {
   StatusBar,
   NativeModules,
   ActivityIndicator,
+  Linking,
+  Image,
 } from 'react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
@@ -25,16 +27,17 @@ const App: () => React$Node = () => {
   const [hasMrBrightside, setHasMrBrightside] = useState(undefined);
 
   const setupBrightSideAuth = useCallback(async response => {
-    console.log('setupBrightSideAuth');
     const {BrightsideAuth} = NativeModules;
 
     const authStatus = await new Promise((resolve, reject) => {
       BrightsideAuth.startup(value => {
-        resolve(value);
+        // resolve(value);
+        resolve('no');
       });
     });
     setMusicAuthStatus(authStatus);
 
+    console.log('authStatus', authStatus);
     if (authStatus && authStatus === 'authorized') {
       const hasMrBrightsideStatus = await new Promise((resolve, reject) => {
         BrightsideAuth.checkForMrBrightside(async value => {
@@ -42,7 +45,7 @@ const App: () => React$Node = () => {
         });
       });
 
-      console.log('set');
+      console.log('authStatus', authStatus);
       setHasMrBrightside(hasMrBrightsideStatus);
     }
     return 'done';
@@ -57,11 +60,18 @@ const App: () => React$Node = () => {
   }
   function renderAuthError() {
     // TODO: link to settings?
+    const onLinkPress = () => Linking.openURL('app-settings:');
     return (
-      <Text style={styles.sectionDescription}>
-        Could not complete auth check. Please make sure this app has permission
-        to access you music library.
-      </Text>
+      <>
+        <Text style={styles.sectionDescription}>
+          Could not complete auth check.
+        </Text>
+        <Text
+          style={[styles.sectionDescription, styles.link]}
+          onPress={onLinkPress}>
+          Please make sure this app has permission to access you music library.
+        </Text>
+      </>
     );
   }
   function renderAuthSuccess() {
@@ -70,19 +80,36 @@ const App: () => React$Node = () => {
         <Text style={styles.sectionDescription}>
           You have Mr. Brightside on your phone!
         </Text>
+        <Image source={require('./assets/facepalm.jpg')} style={styles.image} />
         <Text style={styles.sectionDescription}>
           Now you can enjoy the app.
         </Text>
       </>
     );
   }
+
   function renderAuthFailure() {
+    const onLinkPress = () =>
+      Linking.openURL('https://www.youtube.com/watch?v=gGdGFtwCNBE').catch(
+        err => console.error('An error occurred', err),
+      );
+
+    const link = (
+      <Text
+        style={[styles.sectionDescription, styles.link]}
+        onPress={onLinkPress}>
+        Mr. Brightside
+      </Text>
+    );
     return (
       <>
         <Text style={styles.sectionDescription}>
-          You DO NOT have Mr. Brightside on your phone!
+          You DO NOT have {link} on your phone!
         </Text>
-        <Text style={styles.sectionDescription}>This is illegal.</Text>
+        <Image source={require('./assets/facepalm.jpg')} style={styles.image} />
+        <Text style={styles.sectionDescription}>
+          You are not allow to use this app and you should be ashamed.
+        </Text>
       </>
     );
   }
@@ -138,6 +165,10 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.lighter,
     flex: 1,
   },
+  link: {
+    textDecorationLine: 'underline',
+    color: Colors.primary,
+  },
   engine: {
     position: 'absolute',
     right: 0,
@@ -157,16 +188,10 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: Colors.dark,
   },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
+  image: {
+    width: '100%',
+    marginTop: 40,
+    marginBottom: 40,
   },
 });
 

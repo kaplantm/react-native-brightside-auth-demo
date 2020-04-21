@@ -18,8 +18,8 @@ class BrightsideAuth: NSObject {
       let songQuery = MPMediaQuery()
       songQuery.addFilterPredicate(artistPredicate)
       songQuery.addFilterPredicate(titlePredicate)
-print("findMrBrightside songquery")
-    print("findMrBrightside songquery", songQuery.items!)
+      print("findMrBrightside songquery")
+      print("findMrBrightside songquery", songQuery.items!)
       var song: MPMediaItem?
       if let items = songQuery.items, items.count > 0 {
            song = items[0]
@@ -34,29 +34,35 @@ print("findMrBrightside songquery")
     callback([song != nil])
   }
   
+  func getStringForAuthEnum(_ status: MPMediaLibraryAuthorizationStatus) -> String{
+    switch status {
+      case .authorized:
+        return "authorized"
+      case .notDetermined:
+        return "notDetermined"
+      case .denied:
+        return "denied"
+      case .restricted:
+        return "restricted"
+      @unknown default:
+        return "unknown"
+    }
+  }
+  
   @objc func startup(_ callback: @escaping RCTResponseSenderBlock) {
       let status = MPMediaLibrary.authorizationStatus()
     
-      switch status {
-      case .authorized:
-      callback(["authorized"])
-      case .notDetermined:
-          MPMediaLibrary.requestAuthorization() { status in
-              if status == .authorized {
-                    callback(["authorized"])
-              }
-        else {
-          callback(["not just authorized"])
-
+    if(status == .notDetermined){
+      MPMediaLibrary.requestAuthorization() { newStatus in
+        let newStatusString = self.getStringForAuthEnum(newStatus)
+        callback([newStatusString])
         }
-          }
-      case .denied:
-        callback(["denied"])
-      case .restricted:
-      callback(["restricted"])
-      @unknown default:
-      callback(["unknown"])
-      }
+    }
+    else{
+      let statusString = getStringForAuthEnum(status)
+      callback([statusString])
+    }
+    
  }
 
   
