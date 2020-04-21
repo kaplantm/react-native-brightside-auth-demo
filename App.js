@@ -6,22 +6,26 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {
-  SafeAreaView,
   StyleSheet,
   ScrollView,
   View,
   Text,
   StatusBar,
   NativeModules,
+  ActivityIndicator,
 } from 'react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Header from './Components/Header';
 
 const App: () => React$Node = () => {
-  async function setupBrightSideAuth() {
+  const [musicAuthStatus, setMusicAuthStatus] = useState(undefined);
+  const [hasMrBrightside, setHasMrBrightside] = useState(undefined);
+
+  const setupBrightSideAuth = useCallback(async response => {
+    console.log('setupBrightSideAuth');
     const {BrightsideAuth} = NativeModules;
 
     const authStatus = await new Promise((resolve, reject) => {
@@ -29,20 +33,76 @@ const App: () => React$Node = () => {
         resolve(value);
       });
     });
+    setMusicAuthStatus(authStatus);
 
     if (authStatus && authStatus === 'authorized') {
-      const hasMrBrightside = await new Promise((resolve, reject) => {
-        BrightsideAuth.checkForMrBrightside(value => {
+      const hasMrBrightsideStatus = await new Promise((resolve, reject) => {
+        BrightsideAuth.checkForMrBrightside(async value => {
           resolve(value);
         });
       });
 
-      console.log({hasMrBrightside});
+      console.log('set');
+      setHasMrBrightside(hasMrBrightsideStatus);
     }
     return 'done';
+  }, []);
+
+  useEffect(() => {
+    setupBrightSideAuth();
+  }, [setupBrightSideAuth]);
+
+  function renderLoading() {
+    return <ActivityIndicator size="large" color={Colors.primary} />;
+  }
+  function renderAuthError() {
+    // TODO: link to settings?
+    return (
+      <Text style={styles.sectionDescription}>
+        Could not complete auth check. Please make sure this app has permission
+        to access you music library.
+      </Text>
+    );
+  }
+  function renderAuthSuccess() {
+    return (
+      <>
+        <Text style={styles.sectionDescription}>
+          You have Mr. Brightside on your phone!
+        </Text>
+        <Text style={styles.sectionDescription}>
+          Now you can enjoy the app.
+        </Text>
+      </>
+    );
+  }
+  function renderAuthFailure() {
+    return (
+      <>
+        <Text style={styles.sectionDescription}>
+          You DO NOT have Mr. Brightside on your phone!
+        </Text>
+        <Text style={styles.sectionDescription}>This is illegal.</Text>
+      </>
+    );
   }
 
-  setupBrightSideAuth();
+  function authConditionalRender() {
+    console.log('authConditionalRender', {musicAuthStatus, hasMrBrightside});
+    if (musicAuthStatus === undefined) {
+      console.log('authConditionalRender', 1);
+      return renderLoading();
+    } else if (musicAuthStatus !== 'authorized') {
+      console.log('authConditionalRender', 2);
+      return renderAuthError();
+    } else {
+      if (hasMrBrightside === undefined) {
+        return renderLoading();
+      }
+      console.log('authConditionalRender', 3);
+      return hasMrBrightside ? renderAuthSuccess() : renderAuthFailure();
+    }
+  }
 
   return (
     <>
@@ -55,15 +115,7 @@ const App: () => React$Node = () => {
         <StatusBar barStyle="dark-content" />
         <Header />
         <View style={styles.body}>
-          <View style={styles.sectionContainer}>
-            <Text style={styles.sectionTitle}>BrightsideAuth</Text>
-            <Text style={styles.sectionDescription}>
-              You have Mr. Brightside on your phone!
-            </Text>
-            <Text style={styles.sectionDescription}>
-              Now you can enjoy the app
-            </Text>
-          </View>
+          <View style={styles.sectionContainer}>{authConditionalRender()}</View>
         </View>
       </ScrollView>
     </>
