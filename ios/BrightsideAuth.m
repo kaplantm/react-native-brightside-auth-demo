@@ -10,6 +10,6 @@
 
 @interface RCT_EXTERN_MODULE(BrightsideAuth, NSObject)
 
-RCT_EXTERN_METHOD(setup);
+RCT_EXTERN_METHOD(startup: (RCTResponseSenderBlock)callback);
 
 @end

@@ -32,9 +32,10 @@ const App: () => React$Node = () => {
   // );
 
   console.log({BrightsideAuth});
-  BrightsideAuth.setup(value => {
+  BrightsideAuth.startup(value => {
     console.log('setup is ' + value);
   });
+  // BrightsideAuth.show('cats');
   return (
     <>
       <StatusBar barStyle="dark-content" />
