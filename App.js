@@ -14,14 +14,14 @@ import {
   Text,
   StatusBar,
   ActivityIndicator,
-  Linking,
-  Image,
-  TouchableOpacity,
 } from 'react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Header from './Components/Header';
 import BrightsideAuth from 'react-native-use-health-kit';
+import Authorized from './Components/Authorized';
+import UnAuthorized from './Components/UnAuthorized';
+import MissingPermissions from './Components/MissingPermissions';
 
 const App: () => React$Node = () => {
   const [musicAuthStatus, setMusicAuthStatus] = useState(undefined);
@@ -53,7 +53,6 @@ const App: () => React$Node = () => {
       setHasMrBrightside(hasMrBrightsideStatus);
 
       if (hasMrBrightsideStatus) {
-        console.log('SHOULD PLAY');
         BrightsideAuth.play();
       }
     }
@@ -66,67 +65,6 @@ const App: () => React$Node = () => {
   function renderLoading() {
     return <ActivityIndicator size="large" color={Colors.primary} />;
   }
-  function renderAuthError() {
-    // TODO: link to settings?
-    const onLinkPress = () => Linking.openURL('app-settings:');
-    return (
-      <>
-        <Text style={styles.sectionDescription}>
-          Could not complete auth check.
-        </Text>
-        <Text
-          style={[styles.sectionDescription, styles.link]}
-          onPress={onLinkPress}>
-          Please make sure this app has permission to access you music library.
-        </Text>
-      </>
-    );
-  }
-  function renderAuthSuccess() {
-    return (
-      <>
-        <Text style={styles.sectionDescription}>
-          You have Mr. Brightside on your phone!
-        </Text>
-        <TouchableOpacity onLongPress={() => BrightsideAuth.stop()}>
-          <Image
-            source={require('./assets/success.jpg')}
-            style={styles.image}
-            resizeMode="contain"
-          />
-        </TouchableOpacity>
-        <Text style={styles.sectionDescription}>
-          Now you can enjoy the app.
-        </Text>
-      </>
-    );
-  }
-
-  function renderAuthFailure() {
-    const onLinkPress = () =>
-      Linking.openURL('https://www.youtube.com/watch?v=gGdGFtwCNBE').catch(
-        err => console.error('An error occurred', err),
-      );
-
-    const link = (
-      <Text
-        style={[styles.sectionDescription, styles.link]}
-        onPress={onLinkPress}>
-        Mr. Brightside
-      </Text>
-    );
-    return (
-      <>
-        <Text style={styles.sectionDescription}>
-          You DO NOT have {link} on your phone!
-        </Text>
-        <Image source={require('./assets/facepalm.jpg')} style={styles.image} />
-        <Text style={styles.sectionDescription}>
-          You are not allow to use this app and you should be ashamed.
-        </Text>
-      </>
-    );
-  }
 
   function authConditionalRender() {
     console.log('authConditionalRender', {musicAuthStatus, hasMrBrightside});
@@ -135,13 +73,17 @@ const App: () => React$Node = () => {
       return renderLoading();
     } else if (musicAuthStatus !== 'authorized') {
       console.log('authConditionalRender', 2);
-      return renderAuthError();
+      return <MissingPermissions styles={styles} />;
     } else {
       if (hasMrBrightside === undefined) {
         return renderLoading();
       }
       console.log('authConditionalRender', 3);
-      return hasMrBrightside ? renderAuthSuccess() : renderAuthFailure();
+      return hasMrBrightside ? (
+        <Authorized stop={BrightsideAuth.stop} styles={styles} />
+      ) : (
+        <UnAuthorized styles={styles} />
+      );
     }
   }
 
@@ -160,7 +102,6 @@ const App: () => React$Node = () => {
         style={styles.scrollView}>
         <StatusBar barStyle="dark-content" />
         <Header />
-        <Text onPress={debug}>DEBUG</Text>
         <View style={styles.body}>
           <View style={styles.sectionContainer}>{authConditionalRender()}</View>
         </View>
@@ -168,6 +109,8 @@ const App: () => React$Node = () => {
     </>
   );
 };
+
+// <Text onPress={debug}>DEBUG</Text>
 
 const styles = StyleSheet.create({
   viewWrapper: {
