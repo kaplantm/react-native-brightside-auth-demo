@@ -15,3 +15,6 @@ Suggested use cases:
 - Banking
 - Stonks
 - The Killers app. They don't have one, but if they ever make one ill be sure to @ them on twitter
+
+npm install --save kaplantm/react-native-brightside-auth
+react-native link @johndhammcodes/react-native-swift-library-template
