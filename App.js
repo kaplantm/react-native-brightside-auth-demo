@@ -17,7 +17,6 @@ import {
   ActivityIndicator,
   Linking,
   Image,
-  Button,
   TouchableOpacity,
 } from 'react-native';
 
@@ -31,10 +30,18 @@ const App: () => React$Node = () => {
 
   const setupBrightSideAuth = useCallback(
     async response => {
+      console.log(BrightsideAuth);
       const authStatus = await new Promise((resolve, reject) => {
-        BrightsideAuth.startup(value => {
-          resolve(value);
-        });
+        BrightsideAuth.startup(
+          {
+            title: 'Mr. Brightside',
+            artist: 'The Killers',
+            autoCleanup: true,
+          },
+          value => {
+            resolve(value);
+          },
+        );
       });
       setMusicAuthStatus(authStatus);
 
@@ -144,6 +151,11 @@ const App: () => React$Node = () => {
     }
   }
 
+  function debug() {
+    console.log('RN debug');
+    BrightsideAuth.debug();
+  }
+
   return (
     <>
       <ScrollView
@@ -154,6 +166,7 @@ const App: () => React$Node = () => {
         style={styles.scrollView}>
         <StatusBar barStyle="dark-content" />
         <Header />
+        <Text onPress={debug}>DEBUG</Text>
         <View style={styles.body}>
           <View style={styles.sectionContainer}>{authConditionalRender()}</View>
         </View>

@@ -6,6 +6,7 @@ https://stackoverflow.com/questions/39692230/got-is-not-a-recognized-objective-c
 - npm library (no idea)
 - loop song?
 - cant scroll?
+- broke image press stop
 
 "You can long press to stop the music, but this is, of course, discouraged"
 
