@@ -13,7 +13,6 @@ import {
   View,
   Text,
   StatusBar,
-  NativeModules,
   ActivityIndicator,
   Linking,
   Image,
@@ -22,11 +21,11 @@ import {
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Header from './Components/Header';
+import BrightsideAuth from 'react-native-use-health-kit';
 
 const App: () => React$Node = () => {
   const [musicAuthStatus, setMusicAuthStatus] = useState(undefined);
   const [hasMrBrightside, setHasMrBrightside] = useState(undefined);
-  const {BrightsideAuth} = NativeModules;
 
   const setupBrightSideAuth = useCallback(
     async response => {

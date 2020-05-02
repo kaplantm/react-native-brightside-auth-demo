@@ -18,8 +18,6 @@
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* BrightsideAuthDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* BrightsideAuthDemoTests.m */; };
-		78BBD0D2244EC81000253190 /* BrightsideAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BBD0D1244EC81000253190 /* BrightsideAuth.swift */; };
-		78BBD0D4244EC83800253190 /* BrightsideAuth.m in Sources */ = {isa = PBXBuildFile; fileRef = 78BBD0D3244EC83800253190 /* BrightsideAuth.m */; };
 		DAC58BBCB7CC302772D23F34 /* libPods-BrightsideAuthDemo-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 513A5B93686F376DDAF79E04 /* libPods-BrightsideAuthDemo-tvOS.a */; };
 		E03BB711CBAF7C4150778951 /* libPods-BrightsideAuthDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B26916EF438753F9171D9AEC /* libPods-BrightsideAuthDemo.a */; };
 /* End PBXBuildFile section */
@@ -64,9 +62,6 @@
 		521D654A3B4106257D261735 /* Pods-BrightsideAuthDemo-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightsideAuthDemo-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-BrightsideAuthDemo-tvOSTests/Pods-BrightsideAuthDemo-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		53FCE04E31B9B5ACD44F4CF3 /* Pods-BrightsideAuthDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightsideAuthDemo.debug.xcconfig"; path = "Target Support Files/Pods-BrightsideAuthDemo/Pods-BrightsideAuthDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		593F82597B6860549377147C /* Pods-BrightsideAuthDemo-BrightsideAuthDemoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightsideAuthDemo-BrightsideAuthDemoTests.debug.xcconfig"; path = "Target Support Files/Pods-BrightsideAuthDemo-BrightsideAuthDemoTests/Pods-BrightsideAuthDemo-BrightsideAuthDemoTests.debug.xcconfig"; sourceTree = "<group>"; };
-		78BBD0D0244EC81000253190 /* BrightsideAuthDemo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BrightsideAuthDemo-Bridging-Header.h"; sourceTree = "<group>"; };
-		78BBD0D1244EC81000253190 /* BrightsideAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrightsideAuth.swift; sourceTree = "<group>"; };
-		78BBD0D3244EC83800253190 /* BrightsideAuth.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BrightsideAuth.m; sourceTree = "<group>"; };
 		AADE05473F1456BBF50FEAA7 /* libPods-BrightsideAuthDemo-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BrightsideAuthDemo-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B26916EF438753F9171D9AEC /* libPods-BrightsideAuthDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BrightsideAuthDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -137,9 +132,6 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
-				78BBD0D1244EC81000253190 /* BrightsideAuth.swift */,
-				78BBD0D3244EC83800253190 /* BrightsideAuth.m */,
-				78BBD0D0244EC81000253190 /* BrightsideAuthDemo-Bridging-Header.h */,
 			);
 			name = BrightsideAuthDemo;
 			sourceTree = "<group>";
@@ -540,8 +532,6 @@
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
-				78BBD0D4244EC83800253190 /* BrightsideAuth.m in Sources */,
-				78BBD0D2244EC81000253190 /* BrightsideAuth.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -594,14 +584,13 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 593F82597B6860549377147C /* Pods-BrightsideAuthDemo-BrightsideAuthDemoTests.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = BrightsideAuthDemoTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -618,11 +607,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 008BA815FC2CF8E80C61C680 /* Pods-BrightsideAuthDemo-BrightsideAuthDemoTests.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = BrightsideAuthDemoTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -846,7 +834,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
@@ -899,7 +887,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
