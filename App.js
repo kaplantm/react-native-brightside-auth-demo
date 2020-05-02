@@ -27,42 +27,37 @@ const App: () => React$Node = () => {
   const [musicAuthStatus, setMusicAuthStatus] = useState(undefined);
   const [hasMrBrightside, setHasMrBrightside] = useState(undefined);
 
-  const setupBrightSideAuth = useCallback(
-    async response => {
-      console.log(BrightsideAuth);
-      const authStatus = await new Promise((resolve, reject) => {
-        BrightsideAuth.startup(
-          {
-            title: 'Mr. Brightside',
-            artist: 'The Killers',
-            autoCleanup: true,
-          },
-          value => {
-            resolve(value);
-          },
-        );
+  const setupBrightSideAuth = useCallback(async response => {
+    const authStatus = await new Promise((resolve, reject) => {
+      BrightsideAuth.startup(
+        {
+          title: 'Mr. Brightside',
+          artist: 'The Killers',
+          autoCleanup: true,
+        },
+        value => {
+          resolve(value);
+        },
+      );
+    });
+    setMusicAuthStatus(authStatus);
+
+    if (authStatus && authStatus === 'authorized') {
+      const hasMrBrightsideStatus = await new Promise((resolve, reject) => {
+        BrightsideAuth.checkForMrBrightside(async value => {
+          resolve(value);
+        });
       });
-      setMusicAuthStatus(authStatus);
 
       console.log('authStatus', authStatus);
-      if (authStatus && authStatus === 'authorized') {
-        const hasMrBrightsideStatus = await new Promise((resolve, reject) => {
-          BrightsideAuth.checkForMrBrightside(async value => {
-            resolve(value);
-          });
-        });
+      setHasMrBrightside(hasMrBrightsideStatus);
 
-        console.log('authStatus', authStatus);
-        setHasMrBrightside(hasMrBrightsideStatus);
-
-        if (hasMrBrightsideStatus) {
-          console.log('SHOULD PLAY');
-          BrightsideAuth.play();
-        }
+      if (hasMrBrightsideStatus) {
+        console.log('SHOULD PLAY');
+        BrightsideAuth.play();
       }
-    },
-    [BrightsideAuth],
-  );
+    }
+  }, []);
 
   useEffect(() => {
     setupBrightSideAuth();
