@@ -136,9 +136,14 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 0,
   },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  mainImage: {
+    width: '100%',
+    height: '100%',
+  },
+  authorized: {
+    color: 'white',
+    padding: 10,
+    backgroundColor: 'hsla(146, 68%, 67%, .8 )',
   },
   sectionTitle: {
     fontSize: 24,
@@ -146,15 +151,17 @@ const styles = StyleSheet.create({
     color: Colors.black,
   },
   sectionDescription: {
+    padding: 20,
     fontSize: 18,
     fontWeight: '400',
     color: Colors.dark,
   },
   image: {
-    width: '100%',
+    width: '90%',
     height: '60%',
-    marginTop: 40,
     marginBottom: 40,
+    marginLeft: 20,
+    marginRight: 20,
   },
   button: {
     backgroundColor: 'red',

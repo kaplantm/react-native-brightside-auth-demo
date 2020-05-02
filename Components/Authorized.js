@@ -1,21 +1,18 @@
 import React from 'react';
-import {Text, Image, TouchableOpacity} from 'react-native';
+import {Text, View, Image, TouchableOpacity} from 'react-native';
 
 function Authorized({stop, styles}) {
   return (
-    <>
-      <Text style={styles.sectionDescription}>
+    <View style={{backgroundColor: 'black'}}>
+      <Text style={styles.authorized}>
         You have Mr. Brightside on your phone!
       </Text>
-      <TouchableOpacity onLongPress={() => stop()}>
-        <Image
-          source={require('../assets/success.jpg')}
-          style={styles.image}
-          resizeMode="contain"
-        />
-      </TouchableOpacity>
-      <Text style={styles.sectionDescription}>Now you can enjoy the app.</Text>
-    </>
+      <Image
+        source={require('../assets/dodgecoin.png')}
+        style={styles.mainImage}
+        resizeMode="stretch"
+      />
+    </View>
   );
 }
 

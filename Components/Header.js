@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
   logo: {
     height: 150,
     width: '100%',
-    opacity: 0.5,
+    opacity: 1,
     overflow: 'visible',
   },
 });
